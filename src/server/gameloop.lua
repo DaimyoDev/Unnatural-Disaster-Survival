@@ -5,7 +5,7 @@ local RoundTimer = game.ServerStorage.RoundTimer
 local Map1, Map2, Map3 = game.ServerStorage.Maps.Map1, game.ServerStorage.Maps.Map2, game.ServerStorage.Maps.Map3
 local maps = {Map1, Map2, Map3}
 local roundStarted = false
-local disasters = {"The Purge", "Raining Plastic", "Moderation Team", "Giant Bacon"}
+local disasters = {"The Purge", "Raining Plastic", "Ban Hammer", "Giant Bacon"}
 
 function GameLoop.intermission()
     IntermissionTimer.Value -= 1
@@ -43,8 +43,35 @@ function GameLoop.teleportPlayers(selectedMap)
     return true
 end
 
-function GameLoop.Survivors()
-
+function GameLoop.Survivors(selectedMap)
+    local survivorDetection
+    if selectedMap == Map1 then
+        survivorDetection = Map1.SurvivorDetection
+        survivorDetection.Touched:Connect(function(otherPart)
+            if otherPart.Parent:FindFirstChild("Humanoid") then
+                local humanoid = otherPart.Parent:FindFirstChild("Humanoid")
+                humanoid:TakeDamage(humanoid.Health)
+            end
+        end)
+    end
+    if selectedMap == Map2 then
+        survivorDetection = Map2.SurvivorDetection
+        survivorDetection.Touched:Connect(function(otherPart)
+            if otherPart.Parent:FindFirstChild("Humanoid") then
+                local humanoid = otherPart.Parent:FindFirstChild("Humanoid")
+                humanoid:TakeDamage(humanoid.Health)
+            end
+        end)
+    end
+    if selectedMap == Map3 then
+        survivorDetection = Map3.SurvivorDetection
+        survivorDetection.Touched:Connect(function(otherPart)
+            if otherPart.Parent:FindFirstChild("Humanoid") then
+                local humanoid = otherPart.Parent:FindFirstChild("Humanoid")
+                humanoid:TakeDamage(humanoid.Health)
+            end
+        end)
+    end
 end
 
 function GameLoop.gameRound(selectedMap)
@@ -56,6 +83,8 @@ end
 function GameLoop.roundOver(selectedMap)
     IntermissionTimer.Value = 30
     RoundTimer.Value = 240
+    GameLoop.Survivors(selectedMap)
+    task.wait(5)
     selectedMap.Parent = game.ServerStorage.Maps
     roundStarted = false
     return false

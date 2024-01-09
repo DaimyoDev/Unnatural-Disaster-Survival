@@ -19,7 +19,6 @@ while task.wait(0.1) do
     if IntermissionTimer.Value <= 0 then 
         GameLoop.gameRound(selectedMap)
         if playersTeleported == false then
-            print("teleport")
             playersTeleported = GameLoop.teleportPlayers(selectedMap)
         end
     end
