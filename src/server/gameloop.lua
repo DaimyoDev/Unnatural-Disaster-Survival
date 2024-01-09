@@ -5,6 +5,7 @@ local RoundTimer = game.ServerStorage.RoundTimer
 local Map1, Map2, Map3 = game.ServerStorage.Maps.Map1, game.ServerStorage.Maps.Map2, game.ServerStorage.Maps.Map3
 local maps = {Map1, Map2, Map3}
 local roundStarted = false
+local disasters = {"The Purge", "Raining Plastic", "Moderation Team", "Giant Bacon"}
 
 function GameLoop.intermission()
     IntermissionTimer.Value -= 1
@@ -15,6 +16,15 @@ function GameLoop.selectMap()
     local selectedMapIndex = math.random(1, 3)
     maps[selectedMapIndex].Parent = game.Workspace
     return true, maps[selectedMapIndex]
+end
+
+function GameLoop.chooseDisaster()
+
+    local selectedDisasterIndex = math.random(1, 4)
+    
+    GameTimer:FireAllClients(RoundTimer.Value, disasters[selectedDisasterIndex])
+    task.wait(1)
+
 end
 
 function GameLoop.teleportPlayers(selectedMap)
@@ -41,12 +51,11 @@ function GameLoop.gameRound(selectedMap)
     RoundTimer.Value -= 1
     GameTimer:FireAllClients(RoundTimer.Value, "gameRound")
     roundStarted = true
-
 end
 
 function GameLoop.roundOver(selectedMap)
     IntermissionTimer.Value = 30
-    RoundTimer.Value = 30
+    RoundTimer.Value = 240
     selectedMap.Parent = game.ServerStorage.Maps
     roundStarted = false
     return false
