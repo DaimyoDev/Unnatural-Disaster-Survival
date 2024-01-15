@@ -6,6 +6,7 @@ local Map1, Map2, Map3 = game.ServerStorage.Maps.Map1, game.ServerStorage.Maps.M
 local maps = {Map1, Map2, Map3}
 local roundStarted = false
 local disasters = {"The Purge", "Raining Plastic", "Ban Hammer", "Giant Bacon"}
+local lobbySpawn = game.Workspace.Lobby.SpawnLocation
 
 function GameLoop.intermission()
     IntermissionTimer.Value -= 1
@@ -23,7 +24,7 @@ function GameLoop.chooseDisaster()
     local selectedDisasterIndex = math.random(1, 4)
     
     GameTimer:FireAllClients(RoundTimer.Value, disasters[selectedDisasterIndex])
-    task.wait(1)
+    task.wait(3)
 
 end
 
@@ -45,30 +46,40 @@ end
 
 function GameLoop.Survivors(selectedMap)
     local survivorDetection
-    if selectedMap == Map1 then
+    if selectedMap == Map1 and RoundTimer.Value <= 0 then
         survivorDetection = Map1.SurvivorDetection
         survivorDetection.Touched:Connect(function(otherPart)
             if otherPart.Parent:FindFirstChild("Humanoid") then
-                local humanoid = otherPart.Parent:FindFirstChild("Humanoid")
-                humanoid:TakeDamage(humanoid.Health)
+                local players = game:GetService("Players"):GetPlayers()
+                for index, player in players do
+                    player.Character:FindFirstChild("HumanoidRootPart").CFrame = lobbySpawn.CFrame
+                    player.Character:FindFirstChild("Humanoid").Health = player.Character:FindFirstChild("Humanoid").MaxHealth
+                end
             end
         end)
     end
-    if selectedMap == Map2 then
+    if selectedMap == Map2 and RoundTimer.Value <= 0 then
         survivorDetection = Map2.SurvivorDetection
         survivorDetection.Touched:Connect(function(otherPart)
             if otherPart.Parent:FindFirstChild("Humanoid") then
-                local humanoid = otherPart.Parent:FindFirstChild("Humanoid")
-                humanoid:TakeDamage(humanoid.Health)
+                local players = game:GetService("Players"):GetPlayers()
+                for index, player in players do
+                    player.Character:FindFirstChild("HumanoidRootPart").CFrame = lobbySpawn.CFrame
+                    player.Character:FindFirstChild("Humanoid").Health = player.Character:FindFirstChild("Humanoid").MaxHealth
+                end
             end
         end)
     end
-    if selectedMap == Map3 then
+    if selectedMap == Map3 and RoundTimer.Value <= 0 then
         survivorDetection = Map3.SurvivorDetection
         survivorDetection.Touched:Connect(function(otherPart)
             if otherPart.Parent:FindFirstChild("Humanoid") then
-                local humanoid = otherPart.Parent:FindFirstChild("Humanoid")
-                humanoid:TakeDamage(humanoid.Health)
+                local players = game:GetService("Players"):GetPlayers()
+                for index, player in players do
+                    player.Character:FindFirstChild("HumanoidRootPart").CFrame = lobbySpawn.CFrame
+                    player.Character:FindFirstChild("Humanoid").Health = player.Character:FindFirstChild("Humanoid").MaxHealth
+                end
+                
             end
         end)
     end
@@ -82,9 +93,9 @@ end
 
 function GameLoop.roundOver(selectedMap)
     IntermissionTimer.Value = 30
-    RoundTimer.Value = 240
     GameLoop.Survivors(selectedMap)
-    task.wait(5)
+    task.wait(3)
+    RoundTimer.Value = 240
     selectedMap.Parent = game.ServerStorage.Maps
     roundStarted = false
     return false

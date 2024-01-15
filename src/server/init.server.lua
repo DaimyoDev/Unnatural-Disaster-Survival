@@ -6,7 +6,7 @@ local selectedMap
 local playersTeleported = false
 local disasterSelected = false
 
-while task.wait(0.1) do 
+while task.wait(0.05) do
     if IntermissionTimer.Value > 0 then
         GameLoop.intermission()
         if disasterSelected then
