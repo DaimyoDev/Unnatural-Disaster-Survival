@@ -15,7 +15,7 @@ function GameLoop.intermission()
 end
 
 function GameLoop.selectMap()
-    local selectedMapIndex = math.random(1, 1)
+    local selectedMapIndex = math.random(1, 3)
     maps[selectedMapIndex].Parent = game.Workspace
     return true, maps[selectedMapIndex]
 end
